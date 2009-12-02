@@ -3,6 +3,7 @@ dev*.db
 local_settings.py
 Pinax.egg-info/*
 *.egg
+pip-log.txt
 docs/.build
 docs/_build
 docs/external/ajax-validation
@@ -19,3 +20,5 @@ docs/external/repos/
 docs/external/robots
 docs/external/threadedcomments
 docs/external/timezones
+.pida-metadata
+pinax.locaŀ.wsgi

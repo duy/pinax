@@ -1,0 +1,63 @@
+{% extends "bookmarks/base.html" %}
+
+{% load i18n %}
+{% load pagination_tags %}
+{% load avatar_tags %}
+{% load extra_tagging_tags %}
+
+{% block head_title %}{% blocktrans %}Your Bookmarks{% endblocktrans %}{% endblock %}
+
+{% block body %}
+    <h1>{% trans "Your Bookmarks" %}</h1>
+    
+    {% if bookmark_instances %}
+        {% autopaginate bookmark_instances %}
+        
+        <table class="bookmarks narrow">
+            {% for bookmark_instance in bookmark_instances %}
+                <tr class="{% cycle odd,even %}">
+                    <td class="meta">
+                        <div class="avatar">{% avatar bookmark_instance.bookmark.adder 40 %}</div>
+                        <div class="date">{{ bookmark_instance.bookmark.added|date }}</div>
+                        {#<div class="details"><a href="{% url profiles.views.profile bookmark_instance.bookmark.adder.username %}">{{ bookmark_instance.bookmark.adder }}</a></div>#}
+                    </td>
+                    <td>
+                        <h2><a href="{{ bookmark_instance.bookmark.url }}">{{ bookmark_instance.description }}</a></h2>
+                        {% ifnotequal bookmark_instance.bookmark.adder request.user %}
+                            <div class="save">saved by you on {{ bookmark_instance.saved|date }}.</div>
+                        {% endifnotequal %}
+                        {% if bookmark_instance.note %}
+                            <div class="body">{{ bookmark_instance.note|linebreaks }}</div>
+                        {% endif %}
+                        <div class="url">{% if bookmark_instance.bookmark.get_favicon_url %}<img src="{{ bookmark_instance.bookmark.get_favicon_url }}" height="16" width="16"/> {% endif %}{{ bookmark_instance.bookmark.url }}</div>
+                        {%comment%}
+                        <form method="POST" action="{% url delete_bookmark_instance bookmark_instance.id %}">
+                            <input type="submit" value="{% trans "Delete Bookmark" %}" />
+                            <input type="hidden" name="next" value="{{ request.path }}" />
+                        </form>
+                        {%endcomment%}
+                        <a href="{% url edit_bookmark_instance bookmark_instance.id %}">{% trans "Edit Bookmark" %}</a>
+                        <a href="{% url delete_bookmark_instance bookmark_instance.id %}">{% trans "Delete Bookmark" %}</a>
+                        <div class="export">
+                            {% trans "Export formats:" %}
+                            <a href="/bookmarks/feeds/rss/bookmark/{{bookmark_instance.id}}">RSS 2.0</a>
+                            <a href="/bookmarks/feeds/atom/bookmark/{{bookmark_instance.id}}">Atom</a> 
+                            <a href="/bookmarks/feeds/rss1/bookmark/{{bookmark_instance.id}}">RSS 0.91</a> 
+                            <a href="/bookmarks/feeds/rdf/bookmark/{{bookmark_instance.id}}">RSS 1.0/RDF</a> 
+                            <a href="/bookmarks/api/json/bookmarkinstance/{{bookmark_instance.id}}">JSON model</a> 
+                            <a href="/bookmarks/api/xml/bookmarkinstance/{{bookmark_instance.id}}">XML model</a> 
+                            <a href="/bookmarks/api/rest/xml/bookmarkinstance/{{bookmark_instance.id}}">XML model REST</a> 
+                            <a href="/bookmarks/api/rest/json/bookmarkinstance/{{bookmark_instance.id}}">JSON model REST</a> 
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        
+        {% paginate %}
+        
+    {% else %}
+        <p>{% trans "No bookmarks yet." %}</p>
+    {% endif %}
+    
+{% endblock %}
