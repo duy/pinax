@@ -119,7 +119,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "account.context_processors.openid",
     "account.context_processors.account",
     # duy
+    "messages.context_processors.inbox",
     "friends_app.context_processors.invitations",
+    "bookmarks_social_project.context_processors.combined_inbox_count",
 )
 
 INSTALLED_APPS = (
