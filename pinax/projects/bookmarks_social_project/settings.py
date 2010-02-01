@@ -123,7 +123,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "friends_app.context_processors.invitations",
     "bookmarks_social_project.context_processors.combined_inbox_count",
 )
+# duy
 
+COMBINED_INBOX_COUNT_SOURCES = (
+    "messages.context_processors.inbox",
+    "friends_app.context_processors.invitations",
+    "notification.context_processors.notification",
+)
 INSTALLED_APPS = (
     # included
     'django.contrib.auth',
@@ -162,6 +168,7 @@ INSTALLED_APPS = (
     'voting_extras',
     'django_sorting',
     'friends',
+    'messages',
 
     # for tags app
     'threadedcomments',
@@ -195,6 +202,9 @@ INSTALLED_APPS = (
     'tag_app',
     
     'django.contrib.admin',
+    #duy
+
+    'firefox',
 )
 
 ABSOLUTE_URL_OVERRIDES = {
@@ -234,6 +244,16 @@ AUTHENTICATED_EXEMPT_URLS = [
     r"^/account/confirm_email",
     r"/openid"
 ]
+
+
+# FILE_UPLOAD_HANDLERS is only necessary if you want to track upload
+# # progress in your Django app -- if you have a front-end proxy like
+# # nginx or lighttpd, Django doesn't need to be involved in the upload
+# # tracking.
+#
+from django.conf import global_settings
+FILE_UPLOAD_HANDLERS = ('firefox.upload_handlers.UploadProgressCachedHandler', ) + global_settings.FILE_UPLOAD_HANDLERS
+
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
 try:

@@ -62,8 +62,10 @@ urlpatterns = patterns('',
     #duy
     (r'^avatar/', include('avatar.urls')),
     (r'^invitations/', include('friends_app.urls')),
+    (r'^messages/', include('messages.urls')),
     (r'^tags/', include('tag_app.urls')),
     (r'^admin/(.*)', admin.site.root),
+    (r'^bookmarks/firefox/', include('firefox.urls')),
 # duy
 
 #    url(r'^feeds/(?P<feedtype>\w+)/bookmarks/$', 'bookmarks.views.bookmark_feed', name='bookmark_feed'),
